@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>˚｡⋆୨୧˚ study nook ˚୨୧⋆｡˚</title>
+<meta name="description" content="Un rinconcito para estudiar: pomodoro, frases y gatitos.">
+<meta name="theme-color" content="#FFF4EC">
+
+<!-- Que al agregarla al Dock / pantalla de inicio se comporte como app.
+     Bonus importante: Safari no le aplica el borrado de datos a los 7 días. -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="study nook">
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🍓%3C/text%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Press+Start+2P&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<noscript>
+  <p class="noscript">Esta página necesita JavaScript para funcionar. ♡</p>
+</noscript>
+
+<!-- estrellitas flotando de fondo · las rellena app.js -->
+<div class="sparkles" id="sparkles" aria-hidden="true"></div>
+
+<div class="app" id="app">
+
+  <header class="topbar">
+    <div class="brand">
+      <p class="orn orn--lg" aria-hidden="true">˚｡⋆୨୧˚</p>
+      <h1 class="greet">hola, <span id="userName">Grecia</span></h1>
+      <p class="orn orn--lg" aria-hidden="true">˚୨୧⋆｡˚</p>
+      <p class="goal" id="goalText">la carrera de mis sueños ♡</p>
+    </div>
+
+    <div class="topbar-actions">
+      <span class="sync-badge" id="syncBadge" role="status" hidden></span>
+      <button type="button" class="icon-btn" id="muteBtn" aria-pressed="false" aria-label="Silenciar sonidos">
+        <span id="muteIcon" aria-hidden="true">🔊</span>
+      </button>
+      <button type="button" class="icon-btn" id="settingsBtn" aria-label="Ajustes" aria-expanded="false">
+        <span aria-hidden="true">⚙</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="grid">
+
+    <!-- ───────────────────────────── tareas ───────────────────────────── -->
+    <section class="card card--tasks" aria-labelledby="tasksTitle">
+      <div class="card-bar">
+        <span class="card-dots" aria-hidden="true"></span>
+        <h2 class="card-title" id="tasksTitle">‧₊˚ ✿ tareas ˚₊‧</h2>
+        <span class="card-dots" aria-hidden="true"></span>
+      </div>
+      <div class="card-body">
+        <form class="task-form" id="taskForm" autocomplete="off">
+          <label class="sr-only" for="taskInput">Nueva tarea</label>
+          <input class="px-input" type="text" id="taskInput" maxlength="200" placeholder="¿qué toca hoy?">
+          <button class="px-btn px-btn--icon" type="submit" aria-label="Agregar tarea">+</button>
+        </form>
+
+        <ul class="task-list" id="taskList"></ul>
+
+        <p class="task-empty" id="taskEmpty">
+          <span aria-hidden="true">✿</span> todavía no hay nada acá.<br>
+          escribe tu primera tarea arriba ♡
+        </p>
+        <p class="task-count" id="taskCount" aria-live="polite"></p>
+      </div>
+    </section>
+
+    <!-- ───────────────────────────── pomodoro ─────────────────────────── -->
+    <div class="timer-col">
+      <section class="card card--timer" id="timerCard" aria-labelledby="timerTitle">
+        <div class="card-bar">
+          <span class="card-dots" aria-hidden="true"></span>
+          <h2 class="card-title" id="timerTitle">◆ pomodoro ◆</h2>
+          <span class="card-dots" aria-hidden="true"></span>
+        </div>
+
+        <div class="card-body timer-body">
+          <p class="timer-mode" id="modeLabel">
+            <span aria-hidden="true">🍓</span> hora de concentrarse
+          </p>
+
+          <div class="timer-display" id="timerDisplay" role="timer" aria-live="off">25:00</div>
+          <p class="sr-only" id="timerAnnounce" aria-live="polite"></p>
+
+          <p class="orn focus-only" aria-hidden="true">⋆ ˚ ✧ ˚ ⋆</p>
+          <p class="focus-goal focus-only" id="focusGoal"></p>
+
+          <div class="boba-wrap" id="bobaWrap">
+            <svg class="boba" viewBox="0 0 32 46" shape-rendering="crispEdges" aria-hidden="true" focusable="false">
+              <defs>
+                <clipPath id="bobaClip">
+                  <path d="M7 14 H25 L22 43 H10 Z"/>
+                </clipPath>
+              </defs>
+              <rect class="boba-straw" x="19" y="0" width="4" height="15"/>
+              <g clip-path="url(#bobaClip)">
+                <rect class="boba-milk" id="bobaFill" x="0" y="46" width="32" height="0"/>
+                <g class="boba-pearls" id="bobaPearls"></g>
+              </g>
+              <path class="boba-cup" d="M7 14 H25 L22 43 H10 Z"/>
+              <rect class="boba-lid" x="4" y="10" width="24" height="4"/>
+            </svg>
+            <p class="boba-caption" id="bobaCaption" aria-hidden="true">0%</p>
+          </div>
+
+          <div class="timer-controls">
+            <button type="button" class="px-btn px-btn--primary" id="startBtn">empezar</button>
+            <button type="button" class="px-btn" id="resetBtn">reiniciar</button>
+            <button type="button" class="px-btn" id="skipBtn">saltar</button>
+          </div>
+
+          <p class="session-dots" id="sessionDots" aria-hidden="true"></p>
+          <p class="hint" id="hint">espacio = pausa · esc = salir del modo foco</p>
+
+          <button type="button" class="exit-focus" id="exitFocusBtn">✕ salir del modo foco</button>
+        </div>
+      </section>
+
+      <section class="card card--quote" aria-label="Frase de motivación">
+        <p class="quote" id="quoteText"></p>
+      </section>
+    </div>
+
+    <!-- ───────────────────────────── progreso ─────────────────────────── -->
+    <section class="card card--progress" aria-labelledby="progressTitle">
+      <div class="card-bar">
+        <span class="card-dots" aria-hidden="true"></span>
+        <h2 class="card-title" id="progressTitle">⋆˚✦ mi progreso ✦˚⋆</h2>
+        <span class="card-dots" aria-hidden="true"></span>
+      </div>
+      <div class="card-body">
+        <p class="stamps-label">pomodoros de hoy</p>
+        <div class="stamps" id="stamps" aria-live="polite"></div>
+
+        <div class="stats">
+          <div class="stat">
+            <span class="stat-num" id="statToday">0</span>
+            <span class="stat-lbl">hoy</span>
+          </div>
+          <div class="stat">
+            <span class="stat-num" id="statStreak">0</span>
+            <span class="stat-lbl">días seguidos</span>
+          </div>
+          <div class="stat">
+            <span class="stat-num" id="statTotal">0</span>
+            <span class="stat-lbl">en total</span>
+          </div>
+        </div>
+
+        <p class="orn sep" aria-hidden="true">· ⋆ ˚ ✧ ˚ ⋆ ·</p>
+
+        <h3 class="sub-title">♡ premios ♡</h3>
+        <p class="rewards-note">se canjean con tu hermano, en la vida real ♡</p>
+        <div class="rewards" id="rewardList"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <p class="orn" aria-hidden="true">˚｡⋆୨୧˚ ｡⋆ ୨୧˚｡⋆</p>
+    <p>hecho con ♡ por tu hermano</p>
+  </footer>
+</div>
+
+<!-- mascota pixel · la dibuja app.js -->
+<div class="mascot" id="mascot" aria-hidden="true">
+  <div class="mascot-zzz" id="mascotZzz" aria-hidden="true">ᶻ 𝗓 𐰁</div>
+  <div class="mascot-art" id="mascotArt"></div>
+</div>
+
+<!-- ─────────────────────────────── break ─────────────────────────────── -->
+<div class="overlay overlay--break" id="breakOverlay" role="dialog" aria-modal="true" aria-labelledby="breakTitle" hidden>
+  <div class="break-inner">
+    <p class="orn orn--lg" aria-hidden="true">˚｡⋆୨୧˚ ｡⋆ ୨୧˚｡⋆</p>
+    <h2 class="break-title" id="breakTitle">¡descansa un poquito!</h2>
+    <div class="break-timer" id="breakTimer">05:00</div>
+
+    <div class="polaroid">
+      <div class="polaroid-window" id="catWindow">
+        <img class="cat-img" id="catImg" alt="Un gatito para tu descanso" hidden>
+        <div class="cat-fallback" id="catFallback"></div>
+        <div class="cat-loading" id="catLoading" aria-hidden="true">buscando un gatito…</div>
+      </div>
+      <p class="polaroid-caption" id="catCaption">♡ ─ ♡ ─ ♡</p>
+    </div>
+
+    <div class="break-controls">
+      <button type="button" class="px-btn" id="anotherCatBtn">otro gatito 🐾</button>
+      <button type="button" class="px-btn px-btn--primary" id="backToWorkBtn">volver a estudiar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ────────────────────────────── ajustes ────────────────────────────── -->
+<div class="overlay" id="settingsOverlay" role="dialog" aria-modal="true" aria-labelledby="settingsTitle" hidden>
+  <div class="modal">
+    <div class="card-bar">
+      <span class="card-dots" aria-hidden="true"></span>
+      <h2 class="card-title" id="settingsTitle">⚙ tus ajustes ⚙</h2>
+      <span class="card-dots" aria-hidden="true"></span>
+    </div>
+    <form class="modal-body" id="settingsForm">
+      <label class="field">
+        <span>tu nombre</span>
+        <input class="px-input" type="text" id="setName" maxlength="40" required>
+      </label>
+      <label class="field">
+        <span>tu meta</span>
+        <input class="px-input" type="text" id="setGoal" maxlength="120" placeholder="la carrera de mis sueños ♡">
+      </label>
+
+      <p class="orn sep" aria-hidden="true">· ⋆ ˚ ✧ ˚ ⋆ ·</p>
+
+      <div class="field-row">
+        <label class="field field--sm">
+          <span>foco</span>
+          <input class="px-input" type="number" id="setFocus" min="1" max="180" required>
+        </label>
+        <label class="field field--sm">
+          <span>break corto</span>
+          <input class="px-input" type="number" id="setShort" min="1" max="60" required>
+        </label>
+        <label class="field field--sm">
+          <span>break largo</span>
+          <input class="px-input" type="number" id="setLong" min="1" max="120" required>
+        </label>
+      </div>
+      <p class="field-note">minutos · el break largo llega cada 4 pomodoros</p>
+
+      <label class="check-line">
+        <input type="checkbox" id="setFullscreen" class="px-check">
+        <span>pantalla completa al entrar en modo foco</span>
+      </label>
+
+      <div class="modal-actions">
+        <button type="button" class="px-btn" id="settingsCancel">cancelar</button>
+        <button type="submit" class="px-btn px-btn--primary">guardar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ─────────────────────────────── vale ──────────────────────────────── -->
+<div class="overlay" id="voucherOverlay" role="dialog" aria-modal="true" aria-labelledby="voucherTitle" hidden>
+  <div class="voucher">
+    <p class="voucher-edge" aria-hidden="true">♡ ─ ♡ ─ ♡ ─ ♡ ─ ♡ ─ ♡ ─ ♡</p>
+    <p class="voucher-kicker">vale por</p>
+    <p class="voucher-emoji" id="voucherEmoji" aria-hidden="true">🧋</p>
+    <h2 class="voucher-prize" id="voucherTitle">Bubble tea</h2>
+    <p class="voucher-meta">
+      para <strong id="voucherName">Grecia</strong><br>
+      por <span id="voucherThreshold">6</span> pomodoros bien hechos
+    </p>
+    <p class="voucher-code" id="voucherCode">VALE-BBT-7F3K</p>
+    <p class="voucher-date" id="voucherDate"></p>
+    <p class="voucher-edge" aria-hidden="true">♡ ─ ♡ ─ ♡ ─ ♡ ─ ♡ ─ ♡ ─ ♡</p>
+    <p class="voucher-hint">sácale una foto y mándasela a tu hermano 📸</p>
+    <button type="button" class="px-btn px-btn--primary" id="voucherClose">¡gracias!</button>
+  </div>
+</div>
+
+<div class="confetti" id="confetti" aria-hidden="true"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
